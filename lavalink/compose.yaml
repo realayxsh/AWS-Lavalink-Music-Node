@@ -1,0 +1,37 @@
+services:
+  lavalink:
+    # Official Lavalink v4 Alpine image; the stable v4.2.2 release was current
+    # when this setup was prepared. This major-version tag follows v4 updates.
+    image: ghcr.io/lavalink-devs/lavalink:4-alpine
+    container_name: lavalink
+    restart: unless-stopped
+    environment:
+      LAVALINK_SERVER_PASSWORD: ${LAVALINK_SERVER_PASSWORD:?Set LAVALINK_SERVER_PASSWORD in .env}
+      JAVA_TOOL_OPTIONS: "-Xms512M -Xmx2G"
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml:ro
+      - ./plugins:/opt/Lavalink/plugins
+    expose:
+      - "2333"
+    mem_limit: 3g
+    cpus: 2.0
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: lavalink-caddy
+    restart: unless-stopped
+    depends_on:
+      - lavalink
+    environment:
+      LAVALINK_DOMAIN: ${LAVALINK_DOMAIN:?Set LAVALINK_DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
