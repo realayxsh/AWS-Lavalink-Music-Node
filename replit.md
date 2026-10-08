@@ -4,6 +4,7 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Run & Operate
 
+- AWS Lavalink hosting: follow `lavalink/README.md` for EC2 setup, DNS, private password generation, Docker Compose commands, bot connection details, and troubleshooting. The endpoint is not live until deployed; the example hostname/password are placeholders. External bot connections use TLS on port 443, not the internal port 2333.
 - `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
